@@ -21,7 +21,7 @@ User = get_user_model()
 # Create your views here.
 class BookList(ListCreateAPIView):
     def get_queryset(self):
-        return Book.object.all()
+        return Book.objects.all()
     
     def get_serializer_class(self):
         return BookSerializer
