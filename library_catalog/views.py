@@ -1,6 +1,3 @@
-from django.shortcuts import render
-
-# Create your views here.
 from django.shortcuts import render, get_object_or_404
 from rest_framework import status
 from rest_framework.response import Response
@@ -12,8 +9,10 @@ from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 from django.contrib.auth import authenticate
 from .serializers import RegisterSerializer
 from rest_framework.views import APIView
+from rest_framework import permissions
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveUpdateAPIView
 from .models import Book, Author, CustomUser, Transaction
 from .serializers import BookSerializer, AuthorSerializer, CustomUserSerializer, TransactionSerializer
 
@@ -37,50 +36,51 @@ class BookDetail(RetrieveUpdateDestroyAPIView):
     
 
 class AuthorList(ListCreateAPIView):
+    permission_classes = [permissions.IsAdminUser]
     def get_queryset(self):
-        return Author.object.all()
+        return Author.objects.all()
     
     def get_serializer_class(self):
         return AuthorSerializer
     
 class AuthorDetail(RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
-        return Author.object.all()
+        return Author.objects.all()
     
     def get_serializer_class(self):
         return AuthorSerializer
     
 class CustomUserList(ListCreateAPIView):
     def get_queryset(self):
-        return CustomUser.object.all()
+        return CustomUser.objects.all()
     
     def get_serializer_class(self):
         return CustomUserSerializer
     
 class CustomUserDetail(RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
-        return CustomUser.object.all()
+        return CustomUser.objects.all()
     
     def get_serializer_class(self):
         return CustomUserSerializer
     
 class TransactionList(ListCreateAPIView):
     def get_queryset(self):
-        return Transaction.object.all()
+        return Transaction.objects.all()
     
     def get_serializer_class(self):
         return TransactionSerializer
     
 class TransactionDetail(RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
-        return Transaction.object.all()
+        return Transaction.objects.all()
     
     def get_serializer_class(self):
         return TransactionSerializer
     
 class RegisterView(generics.CreateAPIView):
     def get_queryset(self):
-        return User.object.all()
+        return User.objects.all()
     
     def get_serializer_class(self):
         return RegisterSerializer
@@ -105,6 +105,17 @@ class LoginView(APIView):
         
         if user:
             token, _ = Token.objects.get_or_create(user=user)
-            return Response({'token': token.key}, status=status.HTTP_200_OK)
+            return Response({'token': token.key, 'user': {"username": user.username, "email": user.email}})
         else:
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        
+
+class UserProfileView(generics.RetrieveUpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+
+    # only user see/update their own profile
+    def get_object(self):
+        return self.request.user
+
