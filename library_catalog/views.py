@@ -7,7 +7,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import get_user_model
 from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 from django.contrib.auth import authenticate
-from .serializers import RegisterSerializer
+from .serializers import CheckOutSerializer, RegisterSerializer, ReturnSerializer
 from rest_framework.views import APIView
 from rest_framework import permissions
 from rest_framework.permissions import IsAuthenticated
@@ -78,6 +78,22 @@ class TransactionDetail(RetrieveUpdateDestroyAPIView):
     def get_serializer_class(self):
         return TransactionSerializer
     
+class CheckOutBookView(generics.CreateAPIView):
+    serializer_class = CheckOutSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+class ReturnBookView(generics.UpdateAPIView):
+    serializer_class = ReturnSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Transaction.objects.filter(returns__isnull=True)
+
+class UserTransactionsView(generics.ListAPIView):
+    serializer_class = TransactionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Transaction.objects.filter(user=self.request.user)
+    
 class RegisterView(generics.CreateAPIView):
     def get_queryset(self):
         return User.objects.all()
@@ -113,7 +129,6 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
 
-    # only user see/update their own profile
     def get_object(self):
         return self.request.user
 

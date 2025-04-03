@@ -35,7 +35,7 @@ class Transaction(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='Transactions')
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='Transactions')
     check_out = models.DateTimeField(auto_now_add=True)
-    returns = models.DateTimeField()
+    returns = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.user.username} borrowed {self.book.title}"
