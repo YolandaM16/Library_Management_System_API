@@ -14,7 +14,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveUpdateAPIView
 from .models import Book, Author, CustomUser, Transaction
-from .serializers import BookSerializer, AuthorSerializer, CustomUserSerializer, TransactionSerializer
+from .serializers import BookSerializer, AuthorSerializer, CustomUserSerializer, TransactionSerializer, LoginSerializer
 
 User = get_user_model()
 
@@ -93,15 +93,13 @@ class RegisterView(generics.CreateAPIView):
         return Response({'token': token.key, 'user': response.data})
 
 
-class LoginView(APIView):
+class LoginView(generics.GenericAPIView):
+    serializer_class = LoginSerializer
     def post(self, request):
-        username = request.data.get('username')
-        password = request.data.get('password')
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = authenticate(username=serializer.validated_data['username'], password=serializer.validated_data['password'])
         
-        if not username or not password:
-            return Response({'error': 'Username and password are required'}, status=status.HTTP_400_BAD_REQUEST)
-
-        user = authenticate(username=username, password=password)
         
         if user:
             token, _ = Token.objects.get_or_create(user=user)

@@ -10,7 +10,7 @@ View Available Books
 
 API Endpoints:
 Books Endpoint
-User Endpoint
+User Endpoint:
 Transaction Endpoint
 
 Setup:

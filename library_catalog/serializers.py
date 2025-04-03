@@ -11,7 +11,6 @@ class AuthorSerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 class BookSerializer(serializers.ModelSerializer):
-    author = AuthorSerializer(read_only=True)
     class Meta:
         model = Book
         fields = ['id', 'title', 'author', 'isbn', 'published_date', 'number_of_copies']
@@ -33,6 +32,10 @@ class RegisterSerializer(serializers.ModelSerializer):
         Token.objects.create(user=user)
         return user
 
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=255)
+    password = serializers.CharField(write_only=True)
 
 
 class TransactionSerializer(serializers.ModelSerializer):
