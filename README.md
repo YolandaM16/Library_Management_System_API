@@ -34,13 +34,21 @@ Installation & Setup:
 
 git clone https://github.com/YolandaM16/Library_Management_System_API.git
 cd project_directory
+
 django-admin manage.py startproject library_management_system_api
+
 python3 manage.py startapp library_catalog
+
 Create a virtual environment and activate it:
+
 pipenv shell
+
 Apply migrations:
+
 python3 manage.py makemigrations
+
 python3 manage.py migrate
+
 python3 manage.py runserver
 
 API Endpoints
@@ -48,48 +56,67 @@ API Endpoints
 Authentication
 
 Register a User
+
 *POST* http://127.0.0.1:8000/api/register/
 
 {
+
   "username": "john",
+
   "email": "johndoe@gmail.com",
+
   "password": "john57"
+
 }
 
 Login 
+
 *POST* http://127.0.0.1:8000/api/login/
 
 {
+
     "username": "john",
+
     "password": "john57"
+
 }
 
 Profile
+
 *GET* http://127.0.0.1:8000/api/profile/ (Admin only)
 
 Author:
 
 Author Detail
+
 *POST* http://127.0.0.1:8000/api/authors/<id>/ (Admin only)
 
 {
+
     "name": 5
+
 }
 
 Author List
+
 *GET* http://127.0.0.1:8000/api/authors/ (Admin only)
 
 Books:
+
 *GET* http://127.0.0.1:8000/api/book/
 
 *POST* http://127.0.0.1:8000/api/book/ (Admin only)
 
 *POST* http://127.0.0.1:8000/api/checkout/
+
 {
+
     "book": 5
+
 }
 
 Transaction:
+
 *GET* http://127.0.0.1:8000/api/transactions/
 
 Testing with Postman:

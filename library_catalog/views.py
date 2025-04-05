@@ -12,7 +12,7 @@ from rest_framework.views import APIView
 from rest_framework import permissions
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveUpdateAPIView, UpdateAPIView
 from .models import Book, Author, CustomUser, Transaction
 from .serializers import BookSerializer, AuthorSerializer, CustomUserSerializer, TransactionSerializer, LoginSerializer
 
@@ -86,6 +86,7 @@ class ReturnBookView(generics.UpdateAPIView):
     serializer_class = ReturnSerializer
     permission_classes = [permissions.IsAuthenticated]
     queryset = Transaction.objects.filter(returns__isnull=True)
+
 
 class UserTransactionsView(generics.ListAPIView):
     serializer_class = TransactionSerializer
