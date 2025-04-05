@@ -55,7 +55,15 @@ API Endpoints
 
 Authentication
 
-for (Admin Only) requests, register Admin, for access
+for (Admin Only) requests, register Admin, for access:
+
+{
+
+    "username": "admin",
+    "email": "admin@gmail.com",
+    "password": "admin"
+
+}
 
 Register a User
 
