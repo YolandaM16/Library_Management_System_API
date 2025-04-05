@@ -55,6 +55,8 @@ API Endpoints
 
 Authentication
 
+for (Admin Only) requests, register Admin, for access
+
 Register a User
 
 *POST* http://127.0.0.1:8000/api/register/
