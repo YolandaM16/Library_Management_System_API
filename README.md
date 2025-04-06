@@ -103,7 +103,7 @@ Author Detail
 
 {
 
-    "name": 5
+    "name": "john doe"
 
 }
 
@@ -121,7 +121,7 @@ Books:
 
 {
 
-    "book": 5
+    "book": <id>
 
 }
 
